@@ -39,3 +39,14 @@ def create_product(product: schemas.ProductCreate, db: Session = Depends(get_db)
     db.commit()
     db.refresh(nuevo_producto)
     return nuevo_producto
+
+# 3. Actualizar el stock de un producto
+@app.patch("/api/v1/products/{product_id}", response_model=schemas.ProductResponse, tags=["Productos"])
+def update_product_stock(product_id: int, payload: schemas.ProductStockUpdate, db: Session = Depends(get_db)):
+    producto = db.get(models.Product, product_id)
+    if producto is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Producto no encontrado")
+    producto.stock = payload.stock
+    db.commit()
+    db.refresh(producto)
+    return producto

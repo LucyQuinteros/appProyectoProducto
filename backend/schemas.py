@@ -1,5 +1,5 @@
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 
 # Base compartida
@@ -18,3 +18,7 @@ class ProductResponse(ProductBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+# Datos para actualizar el stock de un producto (PATCH)
+class ProductStockUpdate(BaseModel):
+    stock: int = Field(ge=0)
